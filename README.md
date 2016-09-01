@@ -1,5 +1,6 @@
 ## Usage
 
+```js
 var express = require('express');
 var settings = require('@kadira/settings')
 var app = express();
@@ -17,3 +18,4 @@ app.get('/server', function (req, res) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
+```
