@@ -1,10 +1,12 @@
 import {expect} from 'chai';
-import {sum} from '../';
+import {setClientSideGlobal} from '../';
 const {describe, it} = global;
 
-describe('sum', () => {
-  it('should add two numbers correctly', async () => {
-    const result = await sum(10, 20);
-    expect(result).to.be.equal(30);
+describe('setClientSideGlobal', () => {
+  it('should return valid js which sets the given variable', async () => {
+    let testGlobal;
+    const js = setClientSideGlobal('testGlobal', {foo: 'bar', baz: 'quix'});
+    eval(js); // eslint-disable-line no-eval
+    expect(testGlobal).to.deep.equal({foo: 'bar', baz: 'quix'});
   });
 });
