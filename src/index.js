@@ -1,32 +1,33 @@
 var fs = require('fs');
 
-let allSettings;
-let settings;
+let allSettings = {};
+let settings = {};
 
-export const setup = file => {
-  return JSON.parse(fs.readFileSync(file, 'utf8'));
+export const _setup = file => {
+  const content = fs.readFileSync(file, 'utf8'); // eslint-disable-line no-sync
+  return JSON.parse(content);
 };
 
-export const setClientSideGlobal = (varName, obj) => (
+export const _setClientSideGlobal = (varName, obj) => (
   `window.${varName} = ${JSON.stringify(obj)};`
 );
 
-export const get = () => {
-  return allSettings;
+export const get = name => {
+  return allSettings[name];
 };
 
-export const load = (app, options={}) => {
+export const load = (app, options = {}) => {
   const {
     file = './settings.json',
     clientPath = '/ProjectSettings.js',
     globalVarName = 'ProjectSettings'
   } = options;
 
-  settings = setup(file);
+  settings = _setup(file);
   allSettings = { ...settings.public, ...settings };
 
   app.get(clientPath, function (req, res) {
     res.setHeader('Content-Type', 'text/javascript');
-    res.end(setClientSideGlobal(globalVarName, settings.public || {}));
+    res.end(_setClientSideGlobal(globalVarName, settings.public || {}));
   });
 };
